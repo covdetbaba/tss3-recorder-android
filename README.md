@@ -10,6 +10,10 @@ together.
 **[⬇ Download TSS-3_Recorder.apk](https://github.com/covdetbaba/tss3-recorder-android/releases/latest/download/TSS-3_Recorder.apk)** (2.1 MB, version 1.0)
 
 Open this page on the phone and tap the link above. It always gives the newest version.
+
+Or scan this with the phone camera:
+
+<img src="docs/download-qr.png" width="220" alt="QR code for the download link">
 All versions: [Releases](https://github.com/covdetbaba/tss3-recorder-android/releases).
 
 ## Requirements
