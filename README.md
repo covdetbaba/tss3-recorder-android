@@ -1,17 +1,19 @@
-# TSS-3 Recorder for Android
+# TSS-3 Recorder for Android, and the TSS-3 Suite for Windows
 
-Records Yost Labs TSS-3 (3-Space) sensors over Bluetooth on an Android phone. Each sensor records
-to its own storage, so a weak or busy Bluetooth link cannot lose samples. After **Stop**, the app
-downloads every recording, checks it sample by sample, and saves CSV files that all start and end
-together.
+Records Yost Labs TSS-3 (3-Space) sensors over Bluetooth, on an Android phone or a Windows PC.
+Each sensor records to its own storage, so a weak or busy Bluetooth link cannot lose samples.
+After **Stop**, every recording is downloaded and checked sample by sample, and the CSV files all
+start and end together. Both programs write the same CSV files.
 
 ## Download
 
-**[⬇ Download TSS-3_Recorder.apk](https://github.com/covdetbaba/tss3-recorder-android/releases/latest/download/TSS-3_Recorder.apk)** (2.2 MB, version 1.1)
+| | |
+|---|---|
+| **Android** phone | **[⬇ TSS-3_Recorder.apk](https://github.com/covdetbaba/tss3-recorder-android/releases/latest/download/TSS-3_Recorder.apk)** (2.2 MB, version 1.1). [Instructions below](#install). |
+| **Windows** PC | **[⬇ TSS-3_Suite_Setup.exe](https://github.com/covdetbaba/tss3-recorder-android/releases/latest/download/TSS-3_Suite_Setup.exe)** (45 MB, build 2026.11.20). [Instructions below](#windows). |
 
-Open this page on the phone and tap the link above. It always gives the newest version.
-
-Or scan this with the phone camera:
+The links always give the newest version. On the phone, open this page and tap the Android link,
+or scan this with the phone camera:
 
 <img src="docs/download-qr.png" width="220" alt="QR code for the download link">
 
@@ -110,13 +112,52 @@ flash. Each recording also stays on its sensor (`/DATA`), as it does with the de
 - **Slow download.** The sensor with the weakest signal sets the pace. Once you tap Stop, the data
   is already on the sensors, so bringing them closer to the phone speeds up the download.
 
-## Verify the file (optional)
+## Windows
 
-SHA-256 of `TSS-3_Recorder.apk` 1.1:
-`d913f0d2ad95cee37c9fb087518d9100833b2c0d924944c36d99e2e9ec4209fd`
+`TSS-3_Suite_Setup.exe` installs a modified build of the Yost Labs 3-Space Suite (Python)
+2026.10.27. Its main change is **Record on sensor**, which is on by default: every sensor records
+to its own storage on one shared clock, and the files are downloaded and checked after Stop. On a
+PC whose Bluetooth cannot carry all the sensors live, the original suite's files came back short
+or with gaps. With this build every CSV covers the same time with no missing samples, measured with
+13 sensors. Other changes: faster connecting (about 1.3 s per sensor instead of 35 to 75 s), no
+freezing with many sensors, **Connect All**, automatic reconnection when a Bluetooth link drops,
+and clearer messages. `WHAT_CHANGED.txt` in the program folder lists every change and the
+measurements behind it.
+
+**Needs:** Windows 10 (1709 or later) or Windows 11, 64-bit, with Bluetooth LE. No administrator
+rights and no other software.
+
+**Install**
+
+1. Download `TSS-3_Suite_Setup.exe` and double-click it.
+2. Windows may show *Windows protected your PC*, because the file is not signed by a publisher.
+   Click **More info**, then **Run anyway**.
+3. Answer **Yes**. Setup takes about 10 seconds and offers to start the suite.
+
+Setup installs the program for the current Windows user (`%LOCALAPPDATA%\Programs\TSS-3 Suite`).
+It writes the recording settings (Record on sensor, 100 Hz, timestamp, tared orientation,
+corrected accel and gyro) after backing up any settings already there, and saves recordings in
+`<your user folder>\TSS_logs`. It adds Start-menu and desktop shortcuts and an entry in
+**Settings > Apps > Installed apps**, which is also where you uninstall it. It does not touch an
+existing Yost Labs installation.
+
+**Use:** switch the sensors on, press **Connect All**, and check that every sensor shows as
+connected. Change channels, rate and duration in **Log Config**, then press **Start Logging** and
+later **Stop Logging**. The time display shows *Downloading NN%* until the CSVs are written,
+about 2 minutes per minute recorded with 7 sensors.
+
+## Verify the files (optional)
+
+| File | SHA-256 |
+|---|---|
+| `TSS-3_Recorder.apk` 1.1 | `d913f0d2ad95cee37c9fb087518d9100833b2c0d924944c36d99e2e9ec4209fd` |
+| `TSS-3_Suite_Setup.exe` 2026.11.20 | `a02a7306e2f167e19ca83a757c516acbbe049471473126c15fa7b91b03ca2eec` |
 
 ---
 
-This app is independent and is not made by or affiliated with Yost Labs. TSS-3, 3-Space and
-YL-TSS are names of Yost Labs products and are used here only to say which sensors the app works
-with. It is provided as is, without warranty.
+These programs are independent and are not made by or affiliated with Yost Labs. TSS-3, 3-Space
+and YL-TSS are names of Yost Labs products and are used here only to say which sensors the
+programs work with. The Windows program is built from the Yost Labs 3-Space Suite, which is under
+the MIT License (Copyright (c) 2025 Yost Labs Inc.). Its installer puts the license texts of the
+suite and of every library it includes in the `LICENSES` folder of the program. Icons by
+[Icons8](https://icons8.com). Both programs are provided as is, without warranty.
