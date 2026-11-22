@@ -10,7 +10,7 @@ start and end together. Both programs write the same CSV files.
 | | |
 |---|---|
 | **Android** phone | **[⬇ TSS-3_Recorder.apk](https://github.com/covdetbaba/tss3-recorder-android/releases/latest/download/TSS-3_Recorder.apk)** (2.2 MB, version 1.1). [Instructions below](#install). |
-| **Windows** PC | **[⬇ TSS-3_Suite_Setup.exe](https://github.com/covdetbaba/tss3-recorder-android/releases/latest/download/TSS-3_Suite_Setup.exe)** (45 MB, build 2026.11.20). [Instructions below](#windows). |
+| **Windows** PC | **[⬇ TSS-3_Suite_Setup.exe](https://github.com/covdetbaba/tss3-recorder-android/releases/latest/download/TSS-3_Suite_Setup.exe)** (45 MB, build 2026.11.22). [Instructions below](#windows). |
 
 The links always give the newest version. On the phone, open this page and tap the Android link,
 or scan this with the phone camera:
@@ -115,13 +115,13 @@ flash. Each recording also stays on its sensor (`/DATA`), as it does with the de
 ## Windows
 
 `TSS-3_Suite_Setup.exe` installs a modified build of the Yost Labs 3-Space Suite (Python)
-2026.10.27. Its main change is **Record on sensor**, which is on by default: every sensor records
+2026.10.27 (build 2026.11.22). Its main change is **Record on sensor**, which is on by default: every sensor records
 to its own storage on one shared clock, and the files are downloaded and checked after Stop. On a
 PC whose Bluetooth cannot carry all the sensors live, the original suite's files came back short
 or with gaps. With this build every CSV covers the same time with no missing samples, measured with
 13 sensors. Other changes: faster connecting (about 1.3 s per sensor instead of 35 to 75 s), no
 freezing with many sensors, **Connect All**, automatic reconnection when a Bluetooth link drops,
-and clearer messages. `WHAT_CHANGED.txt` in the program folder lists every change and the
+the battery level on every connected sensor's banner, and clearer messages. `WHAT_CHANGED.txt` in the program folder lists every change and the
 measurements behind it.
 
 **Needs:** Windows 10 (1709 or later) or Windows 11, 64-bit, with Bluetooth LE. No administrator
@@ -141,17 +141,20 @@ corrected accel and gyro) after backing up any settings already there, and saves
 **Settings > Apps > Installed apps**, which is also where you uninstall it. It does not touch an
 existing Yost Labs installation.
 
-**Use:** switch the sensors on, press **Connect All**, and check that every sensor shows as
-connected. Change channels, rate and duration in **Log Config**, then press **Start Logging** and
-later **Stop Logging**. The time display shows *Downloading NN%* until the CSVs are written,
-about 2 minutes per minute recorded with 7 sensors.
+**Use:** switch the sensors on, press **Connect All**, and check that every sensor turns green.
+Each connected sensor's banner shows its battery level under its name. It refreshes about once a
+minute and says *(low)* below 20 %. Change channels, rate and duration in **Log Config**, then
+press **Start Logging** and later **Stop Logging**. The time display shows *Downloading NN%* until
+the CSVs are written, about 2 minutes per minute recorded with 7 sensors.
+
+<img src="docs/windows-banners.png" width="220" alt="Connected sensors with their battery levels">
 
 ## Verify the files (optional)
 
 | File | SHA-256 |
 |---|---|
 | `TSS-3_Recorder.apk` 1.1 | `d913f0d2ad95cee37c9fb087518d9100833b2c0d924944c36d99e2e9ec4209fd` |
-| `TSS-3_Suite_Setup.exe` 2026.11.20 | `a02a7306e2f167e19ca83a757c516acbbe049471473126c15fa7b91b03ca2eec` |
+| `TSS-3_Suite_Setup.exe` 2026.11.22 | `607788d4f9800ce45649e9eea2af6f9406f135857e22e3c2dd2b1fe265951431` |
 
 ---
 
