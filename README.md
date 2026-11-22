@@ -7,13 +7,14 @@ together.
 
 ## Download
 
-**[⬇ Download TSS-3_Recorder.apk](https://github.com/covdetbaba/tss3-recorder-android/releases/latest/download/TSS-3_Recorder.apk)** (2.1 MB, version 1.0)
+**[⬇ Download TSS-3_Recorder.apk](https://github.com/covdetbaba/tss3-recorder-android/releases/latest/download/TSS-3_Recorder.apk)** (2.2 MB, version 1.1)
 
 Open this page on the phone and tap the link above. It always gives the newest version.
 
 Or scan this with the phone camera:
 
 <img src="docs/download-qr.png" width="220" alt="QR code for the download link">
+
 All versions: [Releases](https://github.com/covdetbaba/tss3-recorder-android/releases).
 
 ## Requirements
@@ -31,44 +32,61 @@ All versions: [Releases](https://github.com/covdetbaba/tss3-recorder-android/rel
 4. Open **TSS-3 Recorder** and allow **Nearby devices** when it asks. That permission is what
    lets it find the sensors.
 
-To update, download and install the new version over the old one. Your recordings stay.
+To update, download and install the new version over the old one. Your recordings and settings stay.
 
 ## Record
 
 1. Switch the sensors on near the phone and tap **Scan**. It takes about 8 seconds.
    Untick any sensor you do not want. An orange signal value (-88 dBm or weaker) marks a weak link.
-2. Optional: tap **Check sensors** to connect to each sensor once and show its battery.
-3. Tap **Start**. When the status line says **Recording**, all sensors are recording.
-4. Tap **Stop**. The status line shows **Downloading NN%** until the files are saved.
-   Keep the app open and the phone near the sensors until then. The screen stays on.
-5. Tap **Share last recording** to send the files by email, Drive, and so on.
+2. Optional: tap **Check sensors** to connect to each sensor once and show its battery. It also
+   reads which sensor ids each sensor has (for example accel 7 and 9) and warns if a chosen channel
+   is not supported by a sensor.
+3. Check the line under the buttons. It shows the rate, duration, links, save folder and channels.
+   Tap **Settings** to change them.
+4. Tap **Start**. When the status line says **Recording**, all sensors are recording.
+5. Tap **Stop**, or let the duration run out. The status line shows **Downloading NN%** until the
+   files are saved. Keep the app open and the phone near the sensors until then. The screen stays on.
+6. Tap **Share last recording** to send the files by email, Drive, and so on.
 
-<img src="docs/screenshot.png" width="300" alt="The app after a recording">
+<img src="docs/screenshot.png" width="300" alt="The main screen after a recording">
+
+## Settings
+
+**Settings** has the options of the desktop TSS-3 Suite's Log Config window. They are kept between uses.
+
+| Setting | Meaning |
+|---|---|
+| Rate (Hz) | 0.001 to 2000, the same for every sensor (default 100). |
+| Duration (s) | 0 records until you tap Stop. Any other value stops the recording by itself. |
+| Max links | How many sensors the phone talks to at once (default 7). With more sensors than this, the app starts them in groups and lets them go while they record, then reconnects each one at Stop. Lower it if a phone refuses connections. |
+| Save folder | The folder inside Documents (default `TSS_logs`). |
+| Channels for all sensors | The timestamp always comes first, then up to 15 channels, chosen from the same list as the desktop suite. Channels that read one particular sensor, such as *Corrected Accel Vec* or *Raw Gyro Rate*, ask for its id. *Check sensors* fills in the ids your sensors report. **Default channels** restores tared orientation, primary corrected accel and primary corrected gyro. **Apply to all sensors** removes every per-sensor list. |
+| Per-sensor channels | **Own list** gives one sensor its own channels. **Use general** puts it back on the list for all sensors. |
+
+The phone always records on the sensors, like the desktop suite's *Record on sensor* option, and
+always sets every sensor's clock to one shared time at Start, like *Synchronize Timestamp*. The
+desktop suite's header fields and Ascii/Binary choice only apply to live streaming, so the phone
+does not use them.
+
+<img src="docs/settings.png" width="300" alt="Settings"> <img src="docs/settings-per-sensor.png" width="300" alt="A sensor's own channel list">
 
 ## Files
 
-Recordings are saved in **My Files > Documents > TSS_logs**:
+Recordings are saved in **My Files > Documents > TSS_logs** (or the folder chosen in Settings):
 
 ```
 Documents/TSS_logs/<date_time>/<sensor>/<sensor>.csv
 Documents/TSS_logs/<date_time>/log.txt
 ```
 
-The CSV columns are `Time (s), time64, qx, qy, qz, qw, cAx, cAy, cAz, cGx, cGy, cGz`:
-time in seconds and in microseconds on the shared clock, then tared orientation (quaternion),
-primary corrected accelerometer and primary corrected gyroscope. These are the same files the
-fixed desktop TSS-3 Suite writes. Every sensor's clock is set to one shared time at Start, and
-all files are cut to the stretch every sensor recorded, so they have the same number of rows.
+Each CSV starts with `Time (s), time64`: time in seconds and in microseconds on the shared clock.
+One column per value of each chosen channel follows, named by the sensor. With the default
+channels these are `qx, qy, qz, qw, cAx, cAy, cAz, cGx, cGy, cGz` (tared orientation, primary
+corrected accelerometer, primary corrected gyroscope). These are the same files the fixed desktop
+TSS-3 Suite writes. All files are cut to the stretch every sensor recorded, so they have the same
+number of rows.
 
-## Settings on the screen
-
-- **Rate (Hz):** 100 by default.
-- **Max links:** how many sensors the phone talks to at once (default 7). Phones can only keep
-  a handful of Bluetooth connections open. With more sensors than this, the app starts them in
-  groups and lets them go while they record, then reconnects each one at Stop. Lower the number
-  if a phone refuses connections.
-
-The app puts each sensor's own log settings back afterwards. It saves nothing to the sensor's
+The app puts each sensor's own log settings back afterwards and saves nothing to the sensor's
 flash. Each recording also stays on its sensor (`/DATA`), as it does with the desktop suite.
 
 ## Measured
@@ -76,6 +94,7 @@ flash. Each recording also stays on its sensor (`/DATA`), as it does with the de
 | Test (Galaxy A26 5G) | Result |
 |---|---|
 | 13 sensors, 60 s at 100 Hz, 7 links at a time | 13 files of 6,200 rows each, starts and ends within 10 ms, no missing samples |
+| 13 sensors, 50 Hz, 20 s duration, 4 channels for all and one sensor with its own list (orientation + corrected accel id 9) | stopped by itself at 20 s; 13 files of 1,091 rows each, within 17 ms, no missing samples |
 | 3 sensors, 60 s, 2 links at a time (groups) | 3 files of 6,230 rows each, within 4 ms |
 | Download speed | up to 11 kB/s per sensor; 13 sensors × 60 s saved 3 minutes after Stop |
 
@@ -85,15 +104,16 @@ flash. Each recording also stays on its sensor (`/DATA`), as it does with the de
   permission (Settings > Apps > TSS-3 Recorder > Permissions). Make sure the sensors are switched on.
 - **"did not connect on the first try".** Android sometimes refuses a connection (status 133).
   The app retries up to 6 times on its own, and this message is only information.
-- **A sensor is left out at Start.** It could not be reached. Charge it, bring it closer, or
-  lower *Max links*. The other sensors still record.
+- **A sensor is left out at Start.** It could not be reached, or it refused the chosen channels.
+  Charge it, bring it closer, lower *Max links*, or run *Check sensors* to see which channels it
+  cannot record. The other sensors still record.
 - **Slow download.** The sensor with the weakest signal sets the pace. Once you tap Stop, the data
   is already on the sensors, so bringing them closer to the phone speeds up the download.
 
 ## Verify the file (optional)
 
-SHA-256 of `TSS-3_Recorder.apk` 1.0:
-`aa388c6bda0c731424711bbb946fff41a9cd26dec999a5e4e6ad89e33f408279`
+SHA-256 of `TSS-3_Recorder.apk` 1.1:
+`d913f0d2ad95cee37c9fb087518d9100833b2c0d924944c36d99e2e9ec4209fd`
 
 ---
 
