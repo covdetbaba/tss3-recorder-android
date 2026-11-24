@@ -4,7 +4,7 @@ Records Yost Labs TSS-3 (3-Space) sensors over Bluetooth, on an Android phone or
 Each sensor records to its own storage, so a weak or busy Bluetooth link cannot lose samples.
 After **Stop**, every recording is downloaded and checked sample by sample, and the CSV files all
 start and end together. Both programs write the same CSV files.
-
+ 
 ## Download
 
 | | |
